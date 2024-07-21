@@ -1,20 +1,26 @@
 <section class="pt-8 px-10">
   <div class="p-4 border rounded-lg shadow bg-gray-800 border-gray-700">
-    <div class="flex justify-between align-middle">
-      <h1 class="text-2xl text-white font-bold tracking-tight">Currency converter</h1>
+    <div class="flex justify-between align-middle mb-3">
+      <h1 class="text-2xl text-white tracking-tight">Currency converter</h1>
 
       <div class="bg-slate-700 rounded-lg p-4">
         <p class="font-normal text-gray-700 dark:text-gray-400">
-          Exchange rate : {{ 1 | currency:EURO.code:'symbol':'1.2' }} = {{ exchangeRate$ | async | currency:USD.code:'symbol':'1.2' }}
+          📈 Exchange rate : {{ 1 | currency:EURO.code:'symbol':'1.2' }} = {{ exchangeRate$ | async | currency:USD.code:'symbol':'1.2' }}
         </p>
       </div>
     </div>
 
+    <div class="flex gap-4 mb-3">
+      <p class="text-white">{{ EURO.flag }} {{ EURO.name }}</p>
+      <app-input-toggle [control]="toggleControl"></app-input-toggle>
+      <p class="text-white">{{ USD.flag }} {{ USD.name }}</p>
+    </div>
+
     <div class="flex gap-8">
-      <app-input-number class="w-60" [control]="valueInputControl" [placeholder]="EURO.name" [label]="FROM_LABEL"></app-input-number>
+      <app-input-number class="w-60" [control]="valueInputControl" [placeholder]="EURO.name" [label]="from_label"></app-input-number>
 
       <div class="w-60">
-        <label for="result" class="block mb-2 text-md font-medium text-white">{{ TO_LABEL }}</label>
+        <label for="result" class="block mb-2 text-md font-medium text-white">{{ to_label }}</label>
         <div class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
           <p id="result" class="text-white">{{ result() | currency:USD.code:'symbol':'1.2' }}</p>
         </div>
