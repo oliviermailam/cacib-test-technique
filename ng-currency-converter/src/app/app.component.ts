@@ -15,7 +15,8 @@ import { InputToggleComponent } from './shared/ui/input-toggle/input-toggle.comp
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  readonly exchangeRate$: Observable<number>;
+  exchangeRate$: Observable<number>;
+
   readonly EURO = EURO;
   readonly USD = USD;
 
@@ -26,23 +27,42 @@ export class AppComponent {
     validators: [Validators.required],
   });
   toggleControl = new FormControl<boolean>(false);
+  customRateControl = new FormControl<number | null>(null);
 
   readonly valueInput = signal<number | null>(1);
   readonly toggle = signal<boolean>(false);
   readonly result = computed(() => {
-    return this.exchangeRangeService.preventBinaryFloatingPoint(
+    return this.exchangeRateService.preventBinaryFloatingPoint(
       this.toggle()
-        ? (this.valueInput() ?? 0) / this.exchangeRangeService.exchangeRate()
-        : (this.valueInput() ?? 0) * this.exchangeRangeService.exchangeRate()
+        ? (this.valueInput() ?? 0) / this.exchangeRateService.exchangeRate()
+        : (this.valueInput() ?? 0) * this.exchangeRateService.exchangeRate()
     );
+  });
+  readonly customRate = signal<number | null>(null);
+  readonly currentRate = computed(() => {
+    const customRate = this.customRate();
+    if (
+      typeof customRate === 'number' &&
+      this.exchangeRateService.isCustomRateValid(
+        customRate,
+        this.exchangeRateService.exchangeRate()
+      )
+    ) {
+      return customRate;
+    }
+
+    return this.exchangeRateService.exchangeRate();
+  });
+  readonly showCustomRate = computed(() => {
+    return this.customRate() === this.currentRate();
   });
 
   private readonly subscription: Subscription;
 
-  constructor(private readonly exchangeRangeService: ExchangeRateService) {
-    this.subscription = new Subscription();
+  constructor(private readonly exchangeRateService: ExchangeRateService) {
+    this.exchangeRate$ = toObservable(this.exchangeRateService.exchangeRate);
 
-    this.exchangeRate$ = toObservable(this.exchangeRangeService.exchangeRate);
+    this.subscription = new Subscription();
 
     this.subscription.add(
       this.valueInputControl.valueChanges.subscribe({
@@ -61,10 +81,18 @@ export class AppComponent {
             : `TO ${USD.code} ${USD.flag}`;
 
           this.valueInputControl.patchValue(
-            this.exchangeRangeService.preventBinaryFloatingPoint(this.result())
+            this.exchangeRateService.preventBinaryFloatingPoint(this.result())
           );
 
           this.toggle.update((value) => !value);
+        },
+      })
+    );
+
+    this.subscription.add(
+      this.customRateControl.valueChanges.subscribe({
+        next: (customRate) => {
+          this.customRate.update(() => customRate);
         },
       })
     );

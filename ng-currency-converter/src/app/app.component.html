@@ -1,12 +1,22 @@
 <section class="pt-8 px-10">
-  <div class="p-4 border rounded-lg shadow bg-gray-800 border-gray-700">
-    <div class="flex justify-between align-middle mb-3">
+  <div class="p-8 border rounded-lg shadow bg-gray-800 border-gray-700">
+    <div class="flex justify-between align-middle mb-3 relative">
       <h1 class="text-2xl text-white tracking-tight">Currency converter</h1>
 
-      <div class="bg-slate-700 rounded-lg p-4">
-        <p class="font-normal text-gray-700 dark:text-gray-400">
-          📈 Exchange rate : {{ 1 | currency:EURO.code:'symbol':'1.2' }} = {{ exchangeRate$ | async | currency:USD.code:'symbol':'1.2' }}
-        </p>
+      <div class="absolute right-0 bg-slate-700 rounded-lg p-4">
+        <div class="flex gap-1 mb-2 font-normal text-gray-400">
+          <p>
+            📈 Exchange rate : {{ 1 | currency:EURO.code:'symbol':'1.2' }} =
+          </p>
+
+          <p [class.text-red-400]="showCustomRate()" [class.line-through]="showCustomRate()">{{ exchangeRate$ | async | currency:USD.code:'symbol':'1.2' }}</p>
+
+        </div>
+        @if (showCustomRate()) {
+          <p class="font-normal text-gray-400 text-right mb-2">{{ currentRate() | currency:USD.code:'symbol':'1.2' }} (using custom rate)</p>
+        }
+
+        <app-input-number label="Custom Rate" placeholder="Optionnal" [control]="customRateControl"></app-input-number>
       </div>
     </div>
 

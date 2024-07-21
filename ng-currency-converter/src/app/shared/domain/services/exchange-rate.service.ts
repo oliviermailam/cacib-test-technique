@@ -35,4 +35,8 @@ export class ExchangeRateService implements OnDestroy {
   preventBinaryFloatingPoint(value: number): number {
     return Number(value.toFixed(2));
   }
+
+  isCustomRateValid(customRate: number, currentRate: number): boolean {
+    return (Math.abs(customRate - currentRate) / currentRate) * 100 < 2;
+  }
 }
