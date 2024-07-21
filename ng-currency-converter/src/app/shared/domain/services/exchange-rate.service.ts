@@ -33,6 +33,7 @@ export class ExchangeRateService implements OnDestroy {
   }
 
   preventBinaryFloatingPoint(value: number): number {
+    console.log(Number(value.toFixed(2)));
     return Number(value.toFixed(2));
   }
 }
