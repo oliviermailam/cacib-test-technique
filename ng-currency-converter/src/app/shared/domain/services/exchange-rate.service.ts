@@ -37,6 +37,10 @@ export class ExchangeRateService implements OnDestroy {
   }
 
   isCustomRateValid(customRate: number, currentRate: number): boolean {
-    return (Math.abs(customRate - currentRate) / currentRate) * 100 < 2;
+    return (
+      this.preventBinaryFloatingPoint(
+        Math.abs(customRate - currentRate) / currentRate
+      ) <= 0.02
+    );
   }
 }
