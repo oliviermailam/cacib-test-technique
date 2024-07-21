@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  currency-converter:
+    container_name: ng-currency-converter
+    build:
+      context: ./ng-currency-converter
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/usr/src/app/
+    ports:
+      - 4200:4200
