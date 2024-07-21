@@ -53,8 +53,12 @@ export class AppComponent {
     this.subscription.add(
       this.toggleControl.valueChanges.subscribe({
         next: (value) => {
-          this.from_label = value ? `FROM ${USD.flag}` : `FROM ${EURO.flag}`;
-          this.to_label = value ? `TO ${EURO.flag}` : `TO ${USD.flag}`;
+          this.from_label = value
+            ? `FROM ${USD.code} ${USD.flag}`
+            : `FROM ${EURO.code} ${EURO.flag}`;
+          this.to_label = value
+            ? `TO ${EURO.code} ${EURO.flag}`
+            : `TO ${USD.code} ${USD.flag}`;
 
           this.valueInputControl.patchValue(
             this.exchangeRangeService.preventBinaryFloatingPoint(this.result())
