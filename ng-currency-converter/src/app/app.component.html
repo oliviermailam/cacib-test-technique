@@ -16,7 +16,16 @@
           <p class="font-normal text-gray-400 text-right mb-2">{{ currentRate() | currency:USD.code:'symbol':'1.2' }} (using custom rate)</p>
         }
 
-        <app-input-number label="Custom Rate" placeholder="Optionnal" [control]="customRateControl"></app-input-number>
+        <p class="flex gap-2 mb-2 text-md font-medium text-white">
+          Custom rate
+
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <title>Custom rate is used if the value is not too far from the current rate</title>
+            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
+
+        </p>
+        <app-input-number placeholder="Optionnal" [control]="customRateControl"></app-input-number>
       </div>
     </div>
 
